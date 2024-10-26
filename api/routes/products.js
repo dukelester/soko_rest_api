@@ -1,4 +1,9 @@
 const express = require('express');
+const mongoose = require('mongoose');
+
+const Product = require('../models/products');
+
+
 
 const router = express.Router();
 
@@ -8,17 +13,36 @@ router.get('/', (req, res, next) => {
     });
 });
 
-
 router.post('/', (req, res, next) => {
-    const product = {
-        productName : req.body.productName,
-        price : req.body.price,
-    };
-
-    res.status(200).json({
-        message: 'Handling the post products',
-        product: product
+    const product = new Product({
+        _id: new mongoose.Types.ObjectId(),
+        productTitle: req.body.productTitle,
+        price: req.body.price,
+        description: req.body.description,
+        sellerName: req.body.sellerName,
+        manufacturer: req.body.manufacturer,
+        isValidated: req.body.isValidated || false
     });
+    if (product.productTitle & product.price & product.description) {
+        product.save().then((result) => {
+            console.log(result);
+            res.status(201).json({
+                message: "product Created successfully",
+                product: product
+            });
+        }).catch((error) => {
+            console.log(error);
+            res.status(500).json({
+                error: error.message
+            });
+        });
+    } else {
+        res.status(400).json({
+            message: "Check your body and try again",
+        });
+    }
+    
+
 });
 
 

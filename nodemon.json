@@ -1,0 +1,5 @@
+{
+    "env": {
+        "MONGODBURL":"mongodb://localhost:27017/soko_poa"
+    }
+}

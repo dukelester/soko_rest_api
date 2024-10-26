@@ -11,7 +11,7 @@ const productsRoutes = require('./api/routes/products');
 const ordersRoutes = require('./api/routes/orders');
 
 const mongoURI = process.env.MONGODBURL;
-console.log(mongoURI);
+console.log(mongoURI, 'url');
 
 mongoose.connect(mongoURI).then(() => {
     console.log('Connected to mongodb successfully!');
