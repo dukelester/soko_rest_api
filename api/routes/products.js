@@ -8,9 +8,11 @@ const Product = require('../models/products');
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling the get products'
-    });
+    Product.find().then((products) => {
+        res.status(200).json(products)
+    }).catch((error) => (
+        res.json({error: error.message})
+    ));
 });
 
 router.post('/', (req, res, next) => {
