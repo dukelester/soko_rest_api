@@ -79,15 +79,16 @@ router.patch('/:productId', (req, res, next) => {
 router.delete('/:productId', (req, res, next) => {
     const id = req.params.productId;
     console.log(id)
-    if (id ) {
-        res.status(200).json({
-            message: 'deleting the product'
+    if (id) {
+        Product.deleteOne({_id: id}).then((result) => {
+            res.status(200).json(result);
+        }).catch((error) => {
+            res.status(500).json({error: error.message});
         });
     } else {
-        res.status(404).json({
-            message: "Product not found"
-        });
+        res.status(400).json({message: 'Enter a valid ID'});
     }
+
 });
 
 
