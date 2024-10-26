@@ -1,16 +1,20 @@
 const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
+const mongoose = require('mongoose');
+
+
+
 const app = express();
 
 const productsRoutes = require('./api/routes/products');
 const ordersRoutes = require('./api/routes/orders');
 
-// app.use((req, res, next) => {
-//     res.status(200).json({
-//         message: "Server ready to run"
-//     });
-// });
+const mongoURI = process.env.MONGODBURL;
+console.log(mongoURI);
+
+mongoose.connect(mongoURI);
+
 
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
