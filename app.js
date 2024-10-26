@@ -13,7 +13,11 @@ const ordersRoutes = require('./api/routes/orders');
 const mongoURI = process.env.MONGODBURL;
 console.log(mongoURI);
 
-mongoose.connect(mongoURI);
+mongoose.connect(mongoURI).then(() => {
+    console.log('Connected to mongodb successfully!');
+}).catch(() => {
+    console.log('Sorry! An error occurred!')
+});
 
 
 app.use(morgan('dev'));
