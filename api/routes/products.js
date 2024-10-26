@@ -63,15 +63,16 @@ router.get('/:productId', (req, res, next) => {
 
 router.patch('/:productId', (req, res, next) => {
     const id = req.params.productId;
-    console.log(id)
-    if (id ) {
-        res.status(200).json({
-            message: 'Updating the product'
+    const productBody = req.body;
+    console.log(id, productBody)
+    if (id && productBody) {
+        Product.findByIdAndUpdate(id, productBody, { new:true }).then((result) => {
+            res.status(200).json(result)
+        }).catch((error) => {
+            res.status(500).json({error: error.message});
         });
     } else {
-        res.status(404).json({
-            message: "Product not found"
-        });
+        res.status(400).json({error: "Invalid Product Id"});
     }
 });
 
