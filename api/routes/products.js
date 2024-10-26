@@ -23,25 +23,20 @@ router.post('/', (req, res, next) => {
         manufacturer: req.body.manufacturer,
         isValidated: req.body.isValidated || false
     });
-    if (product.productTitle & product.price & product.description) {
-        product.save().then((result) => {
-            console.log(result);
-            res.status(201).json({
-                message: "product Created successfully",
-                product: product
-            });
-        }).catch((error) => {
-            console.log(error);
-            res.status(500).json({
-                error: error.message
-            });
-        });
-    } else {
-        res.status(400).json({
-            message: "Check your body and try again",
-        });
-    }
     
+    product.save().then((result) => {
+        console.log(result);
+        res.status(201).json({
+            message: "product Created successfully",
+            product: product
+        });
+    }).catch((error) => {
+        console.log(error);
+        res.status(500).json({
+            error: error.message
+        });
+    });
+
 
 });
 
@@ -49,15 +44,18 @@ router.post('/', (req, res, next) => {
 router.get('/:productId', (req, res, next) => {
     const id = req.params.productId;
     console.log(id)
-    if (id === 'special') {
-        res.status(200).json({
-            message: 'You entered the special ID'
-        });
-    } else {
-        res.status(200).json({
-            message: "Getting the details for product"
-        });
-    }
+    Product.findById(id).then((document) => {
+        console.log('From the database', document);
+        if (document) {
+            res.status(200).json(document);
+        } else {
+            res.status(404).json({message: 'No product with that ID found.'})
+        }
+        
+    }).catch((error) => {
+        console.log(error);
+        res.status(500).json({error: error.message})
+    });
 });
 
 
