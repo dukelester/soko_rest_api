@@ -17,6 +17,19 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
 
 
+// Add The headers
+app.use((req, res, next) => {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control_Allow-Headers", "*");
+    if (req.method === 'OPTIONS') {
+        res.header('Access0-Control-Allow-Methods', "POST", "PUT",
+            "GET", "DELETE", "PATCH"
+        );
+        return res.status(200).json({});
+    }
+});
+
+
 app.get('/', (req, res, next) => {
     res.status(200).json({
         message: ' Welcome to our shop REST api. We provide all e-commerce functionalities '
