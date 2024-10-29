@@ -6,8 +6,9 @@ const bcrypt = require('bcrypt');
 const router = express.Router()
 
 const User = require('../models/user');
+const user = require('../models/user');
 
-router.get('/users', (req, res, next) => {
+router.get('/', (req, res, next) => {
     User.find().then((results) => {
         res.status(200).json(results);
     }).catch((error) => {
@@ -46,9 +47,43 @@ router.post('/signup', (req, res, next) => {
 });
 
 
+router.get('/:userId', (req, res, next) => {
+    const id = req.params.userId;
+    
+    User.findById({_id: id}).then((result) => {
+        res.status(200).json(result);
+    }).catch((error) => {
+        res.status(405).json(error);
+    });
+});
+
+router.patch('/:userId', (req, res, next) => {
+    const id = req.params.userId;
+    const userBody = req.body;
+    if (id && userBody) {
+        User.findByIdAndUpdate({_id: id}, userBody, { new: true }).then((updatedUser) => {
+            res.status(200).json({
+                updated: "User updated successfully",
+                updatedUser: updatedUser
+            });
+        }).catch((error) => {
+            res.status(500).res.json(error);
+        });
+    }
+});
 
 
-
+router.delete('/:userId', (req, res, next) => {
+    const id = req.params.userId;
+    User.deleteOne({_id: id}).then(() => {
+        res.status(200).json({
+            delete: 'success',
+            message: `Deleted the user with user id: ${id}`
+        });
+    }).catch((error) => {
+        res.status(500).json(error);
+    });
+});
 
 
 
