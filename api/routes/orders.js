@@ -44,7 +44,12 @@ router.post('/', (req, res, next) => {
                 error: error
             });
         });
-    })
+    }).catch((error) => {
+        res.status(404).json({
+            message: `An error occurred. Check your product Id ${req.body.product}`,
+            error: error
+        });
+    });
 });
 
 
