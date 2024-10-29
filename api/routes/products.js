@@ -90,7 +90,7 @@ router.get('/:productId', (req, res, next) => {
 });
 
 
-router.patch('/:productId', (req, res, next) => {
+router.patch('/:productId', checkAuth, (req, res, next) => {
     const id = req.params.productId;
     const productBody = req.body;
     console.log(id, productBody)
@@ -106,7 +106,7 @@ router.patch('/:productId', (req, res, next) => {
 });
 
 
-router.delete('/:productId', (req, res, next) => {
+router.delete('/:productId', checkAuth, (req, res, next) => {
     const id = req.params.productId;
     console.log(id)
     if (id) {
@@ -120,10 +120,6 @@ router.delete('/:productId', (req, res, next) => {
     }
 
 });
-
-
-
-
 
 
 module.exports = router;

@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 
 const Order = require('../models/orders');
 const Product = require('../models/products');
-
+const checkAuth = require('../middlewares/check-auth');
 
 const router = express.Router();
 
@@ -25,7 +25,7 @@ const getProductPrice = async (productId) => {
     return doc.price
 }
 
-router.post('/', (req, res, next) => {
+router.post('/', checkAuth, (req, res, next) => {
     Product.findById(req.body.product).then((product) => {
         new Order({
             _id: new mongoose.Types.ObjectId(),
@@ -64,7 +64,7 @@ router.get('/:orderId', (req, res, next) => {
 });
 
 
-router.patch('/:orderId', (req, res, next) => {
+router.patch('/:orderId', checkAuth, (req, res, next) => {
     const id = req.params.orderId;
     const order = req.body;
     if (id && order) {
@@ -86,7 +86,7 @@ router.patch('/:orderId', (req, res, next) => {
 });
 
 
-router.delete('/:orderId', (req, res, next) => {
+router.delete('/:orderId', checkAuth, (req, res, next) => {
     const id = req.params.orderId;
     Order.deleteOne({_id:id}).then(() => {
         res.status(200).json({
