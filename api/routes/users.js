@@ -7,9 +7,17 @@ const router = express.Router()
 
 const User = require('../models/user');
 
+router.get('/users', (req, res, next) => {
+    User.find().then((results) => {
+        res.status(200).json(results);
+    }).catch((error) => {
+        res.status(500).json(error);
+    });
+});
+
 
 router.post('/signup', (req, res, next) => {
-    bcrypt.hash(req.body.password, 45, (error, hashedPassword) => {
+    bcrypt.hash(req.body.password, 10, (error, hashedPassword) => {
         if (error) {
             return res.status(500).json(error)
         } else {
