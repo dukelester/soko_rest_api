@@ -8,9 +8,15 @@ const Product = require('../models/products');
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling the get orders'
-    });
+    Order.find().then((results) => {
+        res.status(200).json({
+            count: results.length,
+            orders: results
+        });
+    }).catch((error) => {
+        console.log(error);
+        res.status(500).json(error);
+    })
 });
 
 const getProductPrice = async (productId) => {
