@@ -7,7 +7,7 @@ const checkAuth = require('../middlewares/check-auth');
 
 const router = express.Router();
 
-router.get('/', (req, res, next) => {
+router.get('/', checkAuth, (req, res, next) => {
     Order.find().populate('product').then((results) => {
         res.status(200).json({
             count: results.length,
@@ -53,7 +53,7 @@ router.post('/', checkAuth, (req, res, next) => {
 });
 
 
-router.get('/:orderId', (req, res, next) => {
+router.get('/:orderId', checkAuth, (req, res, next) => {
     const id = req.params.orderId;
     console.log(id)
     Order.findById({_id: id}).populate("product").then((order) => {
