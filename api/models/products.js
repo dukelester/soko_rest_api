@@ -8,6 +8,7 @@ const productSchema = mongoose.Schema({
     sellerName: String,
     manufacturer: String,
     isValidated: Boolean,
+    productImage: { type: String, required: true }
 });
 
 

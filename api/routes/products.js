@@ -50,7 +50,8 @@ router.post('/',uploads.single('productImage'), (req, res, next) => {
         description: req.body.description,
         sellerName: req.body.sellerName,
         manufacturer: req.body.manufacturer,
-        isValidated: req.body.isValidated || false
+        isValidated: req.body.isValidated || false,
+        productImage: req.file.path
     });
     
     product.save().then((result) => {

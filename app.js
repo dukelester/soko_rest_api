@@ -23,8 +23,7 @@ mongoose.connect(mongoURI).then(() => {
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
-
-const uploads = multer({ dest: '/products' })
+app.use('/uploads/products', express.static('uploads/products'));
 
 
 // Add The headers
