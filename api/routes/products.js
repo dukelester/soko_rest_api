@@ -9,7 +9,11 @@ const router = express.Router();
 
 router.get('/', (req, res, next) => {
     Product.find().then((products) => {
-        res.status(200).json(products)
+        const response =  {
+            count: products.length,
+            products: products
+        };
+        res.status(200).json(response);
     }).catch((error) => (
         res.json({error: error.message})
     ));
