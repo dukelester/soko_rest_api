@@ -50,15 +50,11 @@ router.post('/', (req, res, next) => {
 router.get('/:orderId', (req, res, next) => {
     const id = req.params.orderId;
     console.log(id)
-    if (id === 'special') {
-        res.status(200).json({
-            message: 'You entered the special ID'
-        });
-    } else {
-        res.status(200).json({
-            message: "Getting the details for order"
-        });
-    }
+    Order.findById({_id: id}).then((order) => {
+        res.status(200).json(order);
+    }).catch((error) => {
+        res.status(500).json(error);
+    });
 });
 
 
