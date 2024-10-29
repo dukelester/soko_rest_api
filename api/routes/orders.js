@@ -75,16 +75,13 @@ router.patch('/:orderId', (req, res, next) => {
 
 router.delete('/:orderId', (req, res, next) => {
     const id = req.params.orderId;
-    console.log(id)
-    if (id ) {
+    Order.deleteOne({_id:id}).then(() => {
         res.status(200).json({
-            message: 'deleting the order'
+            message: `Deleted the order ${id} successfully`
         });
-    } else {
-        res.status(404).json({
-            message: "order not found"
-        });
-    }
+    }).catch((error) => {
+        res.status(500).json(error);
+    });
 });
 
 
