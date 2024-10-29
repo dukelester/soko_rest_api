@@ -60,16 +60,23 @@ router.get('/:orderId', (req, res, next) => {
 
 router.patch('/:orderId', (req, res, next) => {
     const id = req.params.orderId;
-    console.log(id)
-    if (id ) {
-        res.status(200).json({
-            message: 'Updating the order'
+    const order = req.body;
+    if (id && order) {
+        Order.findByIdAndUpdate({_id: id }, order, { new: true } ).then((updatedOrder) => {
+            res.status(200).json({
+                updated: true,
+                order: updatedOrder
+            });
+        }).catch((error) => {
+            console.log("Error Occurred");
+            res.status(500).json(error);
         });
     } else {
-        res.status(404).json({
-            message: "order not found"
+        res.status(400).json({
+            error: "The Data is not correct"
         });
     }
+    
 });
 
 
