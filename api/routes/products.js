@@ -4,7 +4,18 @@ const multer = require('multer');
 
 const Product = require('../models/products');
 
-const uploads = multer({ dest: 'uploads/products' });
+
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, 'uploads/products')
+    },
+    filename: function(req, file, cb) {
+        cb(null, new Date().toISOString() + file.originalname);
+    }
+});
+
+
+const uploads = multer({ storage: storage });
 
 const router = express.Router();
 
