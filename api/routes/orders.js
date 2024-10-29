@@ -1,4 +1,9 @@
 const express = require('express');
+const mongoose = require('mongoose');
+
+const Order = require('../models/orders');
+const Product = require('../models/products');
+
 
 const router = express.Router();
 
@@ -8,10 +13,30 @@ router.get('/', (req, res, next) => {
     });
 });
 
+const getProductPrice = async (productId) => {
+    const doc = await Product.findById(productId);
+    console.log(doc, 'hhh')
+    return doc.price
+}
 
 router.post('/', (req, res, next) => {
-    res.status(200).json({
-        message: 'Handling the post orders'
+    const order = new Order({
+        _id: new mongoose.Types.ObjectId(),
+        quantity: req.body.quantity,
+        product: req.body.product,
+    });
+    order.save().then((result) => {
+        console.log(result);
+        res.status(201).json({
+            message: "Order has been initiated",
+            order: order
+        });
+    }).catch((error) => {
+        console.log(error);
+        res.status(500).json({
+            message: 'Error occurred',
+            error: error.message
+        });
     });
 });
 
