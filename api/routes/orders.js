@@ -8,7 +8,7 @@ const Product = require('../models/products');
 const router = express.Router();
 
 router.get('/', (req, res, next) => {
-    Order.find().then((results) => {
+    Order.find().populate('product').then((results) => {
         res.status(200).json({
             count: results.length,
             orders: results
@@ -56,7 +56,7 @@ router.post('/', (req, res, next) => {
 router.get('/:orderId', (req, res, next) => {
     const id = req.params.orderId;
     console.log(id)
-    Order.findById({_id: id}).then((order) => {
+    Order.findById({_id: id}).populate("product").then((order) => {
         res.status(200).json(order);
     }).catch((error) => {
         res.status(500).json(error);
