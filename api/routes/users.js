@@ -54,6 +54,37 @@ router.post('/signup', (req, res, next) => {
 });
 
 
+router.post('/login', (req, res, next) => {
+    User.findOne({ email: req.body.email }).then((user) => {
+        if (!user) {
+            res.status(401).json({
+                error: 'Authentication Failure. Check your Credentials'
+            });
+        } else {
+            bcrypt.compare(req.body.password, user.password, (error, result) => {
+                if (error) {
+                    res.status(401).json({
+                        error: 'Authentication Failure. Check your Credentials'
+                    });
+                } else if (result) {
+                    res.status(200).json({
+                        message: 'Login Successful!'
+                    });
+                } else {
+                    res.status(401).json({
+                        error: 'Authentication Failure. Check your Credentials'
+                    });
+                }
+            });
+        }
+    }).catch((error) => {
+        res.status(404).json({
+            message: 'Login failed. Check your credentials',
+            error: error.message
+        });
+    });
+});
+
 router.get('/:userId', (req, res, next) => {
     const id = req.params.userId;
     
