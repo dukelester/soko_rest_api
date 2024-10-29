@@ -1,101 +1,22 @@
 const express = require('express');
-const mongoose = require('mongoose');
 
-const Order = require('../models/orders');
-const Product = require('../models/products');
 const checkAuth = require('../middlewares/check-auth');
+const { getAllOrders, createOrder, getOrderById, updateOrder, deleteOrder } = require('../controllers/orders');
 
 const router = express.Router();
 
-router.get('/', checkAuth, (req, res, next) => {
-    Order.find().populate('product').then((results) => {
-        res.status(200).json({
-            count: results.length,
-            orders: results
-        });
-    }).catch((error) => {
-        console.log(error);
-        res.status(500).json(error);
-    })
-});
+router.get('/', checkAuth, getAllOrders);
 
-const getProductPrice = async (productId) => {
-    const doc = await Product.findById(productId);
-    console.log(doc, 'hhh')
-    return doc.price
-}
-
-router.post('/', checkAuth, (req, res, next) => {
-    Product.findById(req.body.product).then((product) => {
-        new Order({
-            _id: new mongoose.Types.ObjectId(),
-            quantity: req.body.quantity,
-            product: req.body.product,
-        }).save().then((result) => {
-            console.log(result);
-            res.status(201).json({
-                message: "Order has been initiated",
-                order: result
-            });
-        
-        }).catch((error) => {
-            res.status(404).json({
-                message: `Product with id: ${req.body.product} not found`,
-                error: error
-            });
-        });
-    }).catch((error) => {
-        res.status(404).json({
-            message: `An error occurred. Check your product Id ${req.body.product}`,
-            error: error
-        });
-    });
-});
+router.post('/', checkAuth, createOrder);
 
 
-router.get('/:orderId', checkAuth, (req, res, next) => {
-    const id = req.params.orderId;
-    console.log(id)
-    Order.findById({_id: id}).populate("product").then((order) => {
-        res.status(200).json(order);
-    }).catch((error) => {
-        res.status(500).json(error);
-    });
-});
+router.get('/:orderId', checkAuth, getOrderById);
 
 
-router.patch('/:orderId', checkAuth, (req, res, next) => {
-    const id = req.params.orderId;
-    const order = req.body;
-    if (id && order) {
-        Order.findByIdAndUpdate({_id: id }, order, { new: true } ).then((updatedOrder) => {
-            res.status(200).json({
-                updated: true,
-                order: updatedOrder
-            });
-        }).catch((error) => {
-            console.log("Error Occurred");
-            res.status(500).json(error);
-        });
-    } else {
-        res.status(400).json({
-            error: "The Data is not correct"
-        });
-    }
-    
-});
+router.patch('/:orderId', checkAuth, updateOrder);
 
 
-router.delete('/:orderId', checkAuth, (req, res, next) => {
-    const id = req.params.orderId;
-    Order.deleteOne({_id:id}).then(() => {
-        res.status(200).json({
-            message: `Deleted the order ${id} successfully`
-        });
-    }).catch((error) => {
-        res.status(500).json(error);
-    });
-});
+router.delete('/:orderId', checkAuth, deleteOrder);
 
 
 module.exports = router;
