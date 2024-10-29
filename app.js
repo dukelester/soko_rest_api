@@ -2,7 +2,7 @@ const express = require('express');
 const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
-
+const multer = require('multer');
 
 
 const app = express();
@@ -23,6 +23,8 @@ mongoose.connect(mongoURI).then(() => {
 app.use(morgan('dev'));
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(bodyParser.json());
+
+const uploads = multer({ dest: '/products' })
 
 
 // Add The headers
