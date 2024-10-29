@@ -26,24 +26,25 @@ const getProductPrice = async (productId) => {
 }
 
 router.post('/', (req, res, next) => {
-    const order = new Order({
-        _id: new mongoose.Types.ObjectId(),
-        quantity: req.body.quantity,
-        product: req.body.product,
-    });
-    order.save().then((result) => {
-        console.log(result);
-        res.status(201).json({
-            message: "Order has been initiated",
-            order: order
+    Product.findById(req.body.product).then((product) => {
+        new Order({
+            _id: new mongoose.Types.ObjectId(),
+            quantity: req.body.quantity,
+            product: req.body.product,
+        }).save().then((result) => {
+            console.log(result);
+            res.status(201).json({
+                message: "Order has been initiated",
+                order: result
+            });
+        
+        }).catch((error) => {
+            res.status(404).json({
+                message: `Product with id: ${req.body.product} not found`,
+                error: error
+            });
         });
-    }).catch((error) => {
-        console.log(error);
-        res.status(500).json({
-            message: 'Error occurred',
-            error: error.message
-        });
-    });
+    })
 });
 
 
