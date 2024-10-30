@@ -1,5 +1,3 @@
 {
-    "env": {
-        "MONGODBURL":"mongodb+srv://dukelester:J5Hrsa3XBoGhoBzn@cluster0.wr36s.mongodb.net/soko_poa"
-    }
+    
 }
