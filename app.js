@@ -3,6 +3,7 @@ const morgan = require('morgan');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 
+require('dotenv').config()
 
 const app = express();
 
@@ -16,7 +17,7 @@ console.log(mongoURI, 'url');
 mongoose.connect(mongoURI).then(() => {
     console.log('Connected to mongodb successfully!');
 }).catch(() => {
-    console.log('Sorry! An error occurred!')
+    console.log('Sorry! An error occurred! Unable to connect to the Database')
 });
 
 
